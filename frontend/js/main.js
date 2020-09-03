@@ -57,7 +57,7 @@
 })(jQuery);
 
 function copyCommand() {
-    var copyText = document.getElementById("commandinput");
+    var copyText = document.getElementById("commandfield");
 
     copyText.select();
     copyText.setSelectionRange(0, 99999);
@@ -66,7 +66,7 @@ function copyCommand() {
 }
 
 function showScreen(screenToShow) {
-    const SCREENS = ["#loadingbox", "#loginbox", "#successbox"];
+    const SCREENS = ["#loadingscreen", "#loginscreen", "#successscreen"];
     SCREENS.forEach(screen => {
         if (screenToShow === screen) {
             $(screen).removeClass("hiddenitem");
@@ -77,10 +77,9 @@ function showScreen(screenToShow) {
 }
 
 $(document).ready(() => {
-    console.log("docready");
     document.getElementById("loginform").addEventListener("submit", (e) => {
         e.preventDefault();
-        showScreen("#loadingbox");
+        showScreen("#loadingscreen");
         $.ajax({
             type: "POST",
             url: "/api/verifylogin.php",
@@ -91,10 +90,14 @@ $(document).ready(() => {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: (data) => {
-                console.log(data);
+                var command = "/verify " + data.code;
+                $("#commandfield").val(command);
+                showScreen("#successscreen");
             },
-            failure: (errMsg) => {
-                console.log(errMsg);
+            error: (errMsg) => {
+                document.getElementById("errortext").innerText = errMsg.responseJSON.message;
+                $("#errorbox").removeClass("hiddenitem");
+                showScreen("#loginscreen");
             }
         })
     });
