@@ -62,6 +62,12 @@ if ($connection->connect_error) {
 
 $validation_date = date("Y-m-d H:i:s", strtotime(CODE_VALIDITY));
 $sql_statement_template = "REPLACE INTO %s (username, vk, expiration) VALUES ('%s', '%s', '%s')";
+
+// $sql_stmt_prepare = str_replace("%s", "?", $sql_statement_template); // you could also do:
+// $sql_statement_obj = $connection->prepare($sql_stmt_prepare); // meh, real_escape is safe
+// $sql_statement_obj->bind_param("ssss", $sql_statement_template, DB_TABLE, $data["username"],
+//                                $code, $validation_date);
+
 $sql_statement = sprintf(
     $sql_statement_template,
     DB_TABLE,
