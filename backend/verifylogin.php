@@ -72,6 +72,7 @@ $sql_statement = sprintf(
 
 if ($connection->query($sql_statement) !== TRUE) {
     fail(500, "Database error");
+    //fail(500, mysqli_error($connection));
 }
 
 $connection->close();
